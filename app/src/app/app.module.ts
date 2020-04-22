@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FactService } from './services/api/service';
 import { FactModule } from './facts/module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { FactModule } from './facts/module';
     NgReduxRouterModule.forRoot(),
     BrowserAnimationsModule,
     DragDropModule,
-    FactModule
+    FactModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [FactService],
   bootstrap: [AppComponent]
