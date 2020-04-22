@@ -5,10 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { NgReduxModule } from '@angular-redux/store';
 import { NgReduxRouterModule } from '@angular-redux/router';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FactService } from './services/api/service';
+import { FactModule } from './facts/module';
 
 @NgModule({
   declarations: [
@@ -22,8 +24,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     NgReduxModule,
     NgReduxRouterModule.forRoot(),
     BrowserAnimationsModule,
+    DragDropModule,
+    FactModule
   ],
-  providers: [],
+  providers: [FactService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,9 +6,29 @@
       </h2>
     </div>
     <div class="header-menu">
-      categories
-    </div>
+      <nav>
+        <a *ngFor="let category of categories | async" routerLink="/{{category}}" target="_self" (click)="showFacts()">
+          {{ category }}
+        </a>
+      </nav>
+    </div>    
   </nav>
+  <section class="position-2">
+    <div class="loader" *ngIf="isLoader">
+      Loading...
+    </div>
+  </section>
+  <section class="list-wrapper position-3" *ngIf="!isLoader">
+        <div cdkDropList class="fact-list" (cdkDropListDropped)="drop($event)">
+          <div class="fact-block" *ngIf="!value1 || !value2 || !value3 || !value4 || !value5" cdkDrag>
+            There is either no value from api or there are less than 5 values. Please choose another category! 
+          </div>
+          <div *ngIf="value1 && value2 && value3 && value4 && value5">
+            <div class="fact-block" *ngFor="let value of values" cdkDrag>
+              <div *ngIf="value">{{ value }}</div>
+            </div>
+          </div>
+        </div> 
+  </section>
 </section>
-
 <router-outlet></router-outlet>
