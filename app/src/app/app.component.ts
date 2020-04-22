@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Injectable, OnInit, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FactService } from './services/api/service';
 import { Observable } from 'rxjs';
@@ -7,7 +7,8 @@ import {
   Router,
   RouterEvent,
   NavigationStart,
-  NavigationEnd
+  NavigationEnd,
+  NavigationError
 } from "@angular/router";
 
 @Component({
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
   values: [string, string, string, string, string];
   jokeCategories: [string];
 
-  constructor(public factService: FactService, private _router: Router) { }
+  constructor(public factService: FactService, private _router: Router, private cdr: ChangeDetectorRef) { }
   
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.values, event.previousIndex, event.currentIndex);
@@ -70,9 +71,19 @@ export class AppComponent implements OnInit {
     this.categories = this.factService.getCategories();
   }
 
+  navigationInterceptor(event: RouterEvent): void {
+    if (event instanceof NavigationError) {
+      this._router.navigate(["animal"]);
+    }
+    this.cdr.detectChanges();
+  }
+  
   ngOnInit() {
     this.routerEvents();
     this.showFacts();
     this.showCategories();
+    this._router.events.subscribe((event: RouterEvent) => {
+      this.navigationInterceptor(event)
+    });
   }
 }

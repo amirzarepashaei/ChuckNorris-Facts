@@ -4,7 +4,7 @@ import { throwError as observableThrowError } from 'rxjs';
 import { map, tap, catchError, filter } from 'rxjs/operators';
 
 import { ICategories, IFacts } from '../model';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 
 @Injectable({  
   providedIn: "root"  
@@ -22,8 +22,8 @@ export class FactService {
   };  
   constructor(private http: HttpClient, private router: Router) { 
     router.events.pipe(
-      filter(event => event instanceof NavigationEnd)  
-    ).subscribe((event: NavigationEnd) => {
+      filter(event => event instanceof NavigationStart)  
+    ).subscribe((event: NavigationStart) => {
       console.log('event url is ', event.url.slice(1, 10));
       this.id = event.url.slice(1, 10);
       console.log('id is: ', this.id);

@@ -3,9 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FactDetailComponent } from 'src/app/facts/fact-list.component';
 import { ResolverService } from './services/resolvers';
 
-
 const routes: Routes = [
-  { path: '', redirectTo: '/animal', pathMatch: 'full' },
   { path: 'animal', component: FactDetailComponent, resolve: { facts: ResolverService }, runGuardsAndResolvers: 'always'},
   { path: 'career', component: FactDetailComponent, resolve: { facts: ResolverService }, runGuardsAndResolvers: 'always'},
   { path: 'celebrity', component: FactDetailComponent, resolve: { facts: ResolverService }, runGuardsAndResolvers: 'always'},
