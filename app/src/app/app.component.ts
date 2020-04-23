@@ -1,15 +1,13 @@
-import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Router, RouterEvent, NavigationStart, NavigationEnd, NavigationError } from "@angular/router";
+import { Observable } from 'rxjs';
+import { NgRedux } from '@angular-redux/store';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FactService } from './services/api/service';
-import { Observable } from 'rxjs';
 import { ICategories } from './services/model';
-import {
-  Router,
-  RouterEvent,
-  NavigationStart,
-  NavigationEnd,
-  NavigationError
-} from "@angular/router";
+import { AddRemoveActions } from './app.actions';
+import { IAppState } from "../store";
+
 
 @Component({
   selector: 'app-root',
@@ -18,18 +16,34 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'Chuck Norris Facts. Please choose a category!';
   isLoader: boolean;
   isShow = false;
   categories: Observable<ICategories[]>;
   facts: any;
-  text: string;
   values: any;
   custom = [ ];
+  subscription: any;
 
-  constructor(public factService: FactService, private _router: Router, private cdr: ChangeDetectorRef) { 
+
+  constructor(
+    public factService: FactService, 
+    private _router: Router, 
+    private cdr: ChangeDetectorRef, 
+    private ngRedux: NgRedux<IAppState>,
+    private actions: AddRemoveActions) { 
     this.values = [];
+    this.subscription = ngRedux.select<any[]>('custom')
+        .subscribe(newCount => this.custom = newCount);
+  }
+
+  add() {
+    this.ngRedux.dispatch(this.actions.add()); 
+  }
+
+  remove() {
+    this.ngRedux.dispatch(this.actions.remove()); 
   }
 
   toggleDisplay() {
@@ -44,8 +58,9 @@ export class AppComponent implements OnInit {
         event.container.data,
         event.previousIndex,
         event.currentIndex);
+        this.add()
     }
-  }  
+  }
 
   routerEvents() {
     this._router.events.subscribe((event: RouterEvent) => {
@@ -90,9 +105,14 @@ export class AppComponent implements OnInit {
   
   ngOnInit() {
     this.routerEvents();
+    this.showFacts();
     this.showCategories();
     this._router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

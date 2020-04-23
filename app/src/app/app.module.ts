@@ -2,17 +2,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { NgReduxModule } from '@angular-redux/store';
-import { NgReduxRouterModule } from '@angular-redux/router';
-
+import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FactService } from './services/api/service';
 import { FactModule } from './facts/module';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { rootReducer, IAppState, INITIAL_STATE } from '../store'; 
+import { AddRemoveActions } from './app.actions';
+
 
 @NgModule({
   declarations: [
@@ -24,14 +23,24 @@ import { MatIconModule } from '@angular/material/icon';
     HttpClientModule, 
     FormsModule,
     NgReduxModule,
-    NgReduxRouterModule.forRoot(),
     BrowserAnimationsModule,
     DragDropModule,
-    FactModule,
-    MatIconModule,
-    MatButtonModule
+    FactModule
   ],
-  providers: [FactService],
+  providers: [FactService, AddRemoveActions],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(ngRedux: NgRedux<IAppState>,  devTools: DevToolsExtension) {
+    
+    const storeEnhancers = devTools.isEnabled() ?
+    [ devTools.enhancer() ] :
+    [];
+
+    ngRedux.configureStore(
+      rootReducer,
+      INITIAL_STATE,
+      [],
+      storeEnhancers);
+  }
+}

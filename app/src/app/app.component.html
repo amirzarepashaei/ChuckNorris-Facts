@@ -28,20 +28,22 @@
       [cdkDropListData]="values"
       [cdkDropListConnectedTo]="[customList]" 
       class="fact-list" 
-      (cdkDropListDropped)="onDrop($event)">
-      <div class="fact-block" *ngFor="let value of values" cdkDrag>{{ value }}</div>
+      (cdkDropListDropped)="onDrop($event)"
+      (cdkDropListExited)="remove()">
+      <div class="fact-block" *ngFor="let value of values" cdkDrag >{{ value }}</div>
       </div>
    </div>
    <div class="list-container custom-list">
       <h2>custom list</h2>
       <div 
-      cdkDropList 
+      cdkDropList
       #customList="cdkDropList" 
       [cdkDropListData]="custom"
       [cdkDropListConnectedTo]="[sourceList]" 
       class="fact-list" 
-      (cdkDropListDropped)="onDrop($event)">
-      <div class="fact-block" *ngFor="let item of custom" cdkDrag>{{ item }}</div>
+      (cdkDropListDropped)="onDrop($event)"
+      (cdkDropListExited)="remove()">
+      <div class="fact-block" *ngFor="let item of custom" cdkDrag >{{ item }}</div>
       </div>
    </div>
   </section>

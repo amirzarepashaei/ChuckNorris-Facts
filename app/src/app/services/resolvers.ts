@@ -1,11 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  Resolve,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-  NavigationEnd
-} from "@angular/router";
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, NavigationEnd } from "@angular/router";
 import { FactService } from "./api/service";
 import { filter } from 'rxjs/operators';
 
@@ -15,14 +9,7 @@ import { filter } from 'rxjs/operators';
 
 export class ResolverService implements Resolve<any> {
 
-  constructor(private factService: FactService, private router: Router) {
-    router.events.pipe(
-      filter(event => event instanceof NavigationEnd)  
-    ).subscribe((event: NavigationEnd) => {
-      console.log('event url is ', event.url.slice(1, 10));
-      this.factService.getFacts();
-    });
-  }
+  constructor(private factService: FactService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.factService.getFacts();
