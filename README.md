@@ -10,6 +10,11 @@ Check [package.json](https://github.com/amirzarepashaei/ChuckNorris-Facts/blob/m
 
 This app gets a list of Chcuk Norris facts based on specific categories. 
 
+## To run the app
+`cd app`
+`sudo npm i`
+`ng serve --open` 
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`.
