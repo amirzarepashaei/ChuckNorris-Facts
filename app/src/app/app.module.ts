@@ -11,7 +11,7 @@ import { FactService } from './services/api/service';
 import { FactModule } from './facts/module';
 import { rootReducer, IAppState, INITIAL_STATE } from '../store'; 
 import { AddRemoveActions } from './app.actions';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({

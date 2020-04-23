@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, NavigationEnd } from "@angular/router";
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { FactService } from "./api/service";
-import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: "root"
