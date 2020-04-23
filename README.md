@@ -6,7 +6,7 @@
 
 I would recommend to use [Redux DevTools Chrome Extension]https://github.com/zalmoxisus/redux-devtools-extension to monitor the state. 
 
-Check package.json for dependencies. 
+Check [package.json]https://github.com/amirzarepashaei/ChuckNorris-Facts/blob/master/app/package.json for dependencies. 
 
 This app gets a list of Chcuk Norris facts based on specific categories. 
 
