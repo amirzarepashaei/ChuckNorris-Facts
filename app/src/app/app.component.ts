@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FactService } from './services/api/service';
 import { Observable } from 'rxjs';
 import { ICategories } from './services/model';
@@ -19,23 +19,33 @@ import {
 })
 
 export class AppComponent implements OnInit {
-  title = 'Chuck Norris top 5 Facts';
+  title = 'Chuck Norris Facts. Please choose a category!';
   isLoader: boolean;
+  isShow = false;
   categories: Observable<ICategories[]>;
   facts: any;
-  value1: string;
-  value2: string;
-  value3: string;
-  value4: string;
-  value5: string;
-  values: [string, string, string, string, string];
-  jokeCategories: [string];
+  text: string;
+  values: any;
+  custom = [ ];
 
-  constructor(public factService: FactService, private _router: Router, private cdr: ChangeDetectorRef) { }
-  
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.values, event.previousIndex, event.currentIndex);
+  constructor(public factService: FactService, private _router: Router, private cdr: ChangeDetectorRef) { 
+    this.values = [];
   }
+
+  toggleDisplay() {
+    this.isShow = true;
+  }
+  
+  onDrop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }  
 
   routerEvents() {
     this._router.events.subscribe((event: RouterEvent) => {
@@ -56,13 +66,13 @@ export class AppComponent implements OnInit {
     this.factService.getFacts().subscribe(
       (facts) => {
         this.facts = facts;
-        this.value1 = this.facts.result[1]?.value;
-        this.value2 = this.facts.result[2]?.value;
-        this.value3 = this.facts.result[3]?.value;
-        this.value4 = this.facts.result[4]?.value;
-        this.value5 = this.facts.result[5]?.value;
-        this.values = [this.value1, this.value2, this.value3, this.value4, this.value5];
-        this.jokeCategories = this.facts.result[0]?.categories;
+        this.values = [];
+        this.isShow = true;
+        let factResults = this.facts.result;
+        for (let i in factResults) {
+          let index = this.facts.result[i];
+          this.values[i] = [index.value];
+        }
       }
     );
   }
@@ -80,7 +90,6 @@ export class AppComponent implements OnInit {
   
   ngOnInit() {
     this.routerEvents();
-    this.showFacts();
     this.showCategories();
     this._router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event)

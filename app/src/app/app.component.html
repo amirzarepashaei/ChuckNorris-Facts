@@ -7,7 +7,8 @@
     </div>
     <div class="header-menu">
       <nav>
-        <a *ngFor="let category of categories | async" routerLink="/{{category}}" target="_self" (click)="showFacts()">
+        <a *ngFor="let category of categories | async" routerLink="/{{category}}" target="_self"
+          (click)="showFacts(); toggleDisplay();">
           {{ category }}
         </a>
       </nav>
@@ -18,27 +19,31 @@
       Loading...
     </div>
   </section>
-  <section class="list-wrapper position-3" *ngIf="!isLoader">
-        <div cdkDropList class="fact-list" (cdkDropListDropped)="drop($event)">
-          <div class="fact-block" *ngIf="!value1 || !value2 || !value3 || !value4 || !value5" cdkDrag>
-            There is either no value from api or there are less than 5 values. Please choose another category! 
-          </div>
-          <div *ngIf="value1 && value2 && value3 && value4 && value5">
-            <div class="fact-block" *ngFor="let value of values" cdkDrag>
-              <div *ngIf="value">
-                {{ value }}
-                <form action="">
-                  <button mat-fab color="primary" aria-label="delete the fact">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-fab color="warn" aria-label="delete the fact">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div> 
+  <section class="list-wrapper position-3" *ngIf="!isLoader && isShow">
+    <div class="list-container source-list">
+      <h2>source list</h2>
+      <div 
+      cdkDropList 
+      #sourceList="cdkDropList" 
+      [cdkDropListData]="values"
+      [cdkDropListConnectedTo]="[customList]" 
+      class="fact-list" 
+      (cdkDropListDropped)="onDrop($event)">
+      <div class="fact-block" *ngFor="let value of values" cdkDrag>{{ value }}</div>
+      </div>
+   </div>
+   <div class="list-container custom-list">
+      <h2>custom list</h2>
+      <div 
+      cdkDropList 
+      #customList="cdkDropList" 
+      [cdkDropListData]="custom"
+      [cdkDropListConnectedTo]="[sourceList]" 
+      class="fact-list" 
+      (cdkDropListDropped)="onDrop($event)">
+      <div class="fact-block" *ngFor="let item of custom" cdkDrag>{{ item }}</div>
+      </div>
+   </div>
   </section>
 </section>
 <router-outlet></router-outlet>
