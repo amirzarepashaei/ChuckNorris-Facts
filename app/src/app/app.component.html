@@ -1,14 +1,14 @@
 <section class="grid-wrapper">
   <nav class="header-wrapper position-1">
-    <div class="header-logo">
-      <h2>
+    <div class="header-title">
+      <h1>
         <a href="/" target="_self">{{title}}</a>
-      </h2>
+      </h1>
     </div>
     <div class="header-menu">
       <nav>
         <a *ngFor="let category of categories | async" routerLink="/{{category}}" target="_self"
-          (click)="showFacts(); toggleDisplay();">
+          (click)="showFacts(); toggleDisplay();" mat-raised-button>
           {{ category }}
         </a>
       </nav>
@@ -19,9 +19,15 @@
       Loading...
     </div>
   </section>
-  <section class="list-wrapper position-3" *ngIf="!isLoader && isShow">
+  <section class="hero-image position-3" *ngIf="!isLoader && !isShow">
+    <img src="../assets/images/chucknorris.jpg" class="image" alt="chucknorris picture">
+  </section>
+  <section class="instruction position-3" *ngIf="!isLoader && isShow">
+    <h2>{{ instruction }}</h2>
+  </section>
+  <section class="list-wrapper position-4" *ngIf="!isLoader && isShow">
     <div class="list-container source-list">
-      <h2>source list</h2>
+      <p>Source list</p>
       <div 
       cdkDropList 
       #sourceList="cdkDropList" 
@@ -30,11 +36,14 @@
       class="fact-list" 
       (cdkDropListDropped)="onDrop($event)"
       (cdkDropListExited)="remove()">
-      <div class="fact-block" *ngFor="let value of values" cdkDrag >{{ value }}</div>
+      <div *ngIf="!total" class="no-value">
+        <p>{{ text }}</p>
+      </div>
+      <div class="fact-block" *ngFor="let value of values" cdkDrag>{{ value }}</div>
       </div>
    </div>
    <div class="list-container custom-list">
-      <h2>custom list</h2>
+      <p>Custom list</p>
       <div 
       cdkDropList
       #customList="cdkDropList" 

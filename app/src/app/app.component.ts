@@ -17,15 +17,17 @@ import { IAppState } from "../store";
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Chuck Norris Facts. Please choose a category!';
+  title = 'Chuck Norris Facts';
+  instruction = 'You can make your custom list by draging the items from source list!';
   isLoader: boolean;
   isShow = false;
+  total = true;
   categories: Observable<ICategories[]>;
   facts: any;
   values: any;
   custom = [ ];
   subscription: any;
-
+  text: string;
 
   constructor(
     public factService: FactService, 
@@ -48,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   toggleDisplay() {
     this.isShow = true;
+    this.total = true;
   }
   
   onDrop(event: CdkDragDrop<string[]>) {
@@ -87,6 +90,10 @@ export class AppComponent implements OnInit, OnDestroy {
         for (let i in factResults) {
           let index = this.facts.result[i];
           this.values[i] = [index.value];
+        }
+        if (this.facts.total === 0) {
+          this.total = false;
+          this.text = 'Oops! Nothing to show here.';
         }
       }
     );
